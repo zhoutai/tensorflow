@@ -163,6 +163,9 @@ Status HadoopFileSystem::Connect(StringPiece fname, hdfsFS* fs) {
     // configuration files). See:
     // https://github.com/tensorflow/tensorflow/blob/v1.0.0/third_party/hadoop/hdfs.h#L259
     hdfs_->hdfsBuilderSetNameNode(builder, "default");
+  } else if (scheme == "pangu") {
+    std::string pangu = scheme + "://" + nn;
+    hdfs_->hdfsBuilderSetNameNode(builder, pangu.c_str());
   } else {
     hdfs_->hdfsBuilderSetNameNode(builder, nn.c_str());
   }
@@ -503,5 +506,6 @@ Status HadoopFileSystem::Stat(const string& fname, FileStatistics* stats) {
 
 REGISTER_FILE_SYSTEM("hdfs", HadoopFileSystem);
 REGISTER_FILE_SYSTEM("viewfs", HadoopFileSystem);
+REGISTER_FILE_SYSTEM("pangu", HadoopFileSystem);
 
 }  // namespace tensorflow
